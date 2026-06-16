@@ -1,0 +1,325 @@
+/* =========================================
+   PALETA DE COLORES (Basada en tu diseño)
+========================================= */
+:root {
+    --fondo-pagina: #f4ece1;
+    --cafe-oscuro: #563d2d;
+    --fondo-tarjeta: #e5d5c1;
+    --texto-oscuro: #4a3b32;
+    --texto-claro: #ffffff;
+    --borde-tarjeta: #d9c5ae;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--fondo-pagina);
+    color: var(--texto-oscuro);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* =========================================
+   ENCABEZADO (Barra superior delgada)
+========================================= */
+header {
+    background-color: var(--cafe-oscuro);
+    color: var(--texto-claro);
+    padding: 10px 20px;
+    text-align: left;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 16px;
+    font-family: sans-serif;
+}
+
+header p {
+    margin: 0;
+    font-size: 11px;
+    color: #d1c4b9;
+}
+
+/* =========================================
+   SECCIÓN PRINCIPAL (Tarjeta central café)
+========================================= */
+main {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+/* Apunta a la primera sección (Fianchetto Cafe) */
+main > section:first-of-type {
+    background-color: var(--cafe-oscuro);
+    color: var(--texto-claro);
+    border-radius: 12px;
+    padding: 40px 20px;
+    max-width: 700px;
+    margin: 0 auto 40px auto;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+main > section:first-of-type h2 {
+    color: var(--texto-claro);
+    margin: 15px 0 10px 0;
+}
+
+main > section:first-of-type p {
+    font-size: 14px;
+    max-width: 500px;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+#taza-cafe {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--fondo-tarjeta);
+    transition: transform 0.2s;
+}
+
+#taza-cafe:hover {
+    transform: scale(1.1);
+}
+
+/* =========================================
+   MENÚ Y BOTONES
+========================================= */
+h3 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 40px;
+}
+
+nav button {
+    background-color: var(--fondo-tarjeta);
+    border: none;
+    color: var(--texto-oscuro);
+    padding: 8px 25px;
+    font-size: 13px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* TRUCO: Si el botón tiene texto en negrita (por tu JS), se vuelve oscuro */
+nav button[style*="bold"] {
+    background-color: var(--cafe-oscuro) !important;
+    color: var(--texto-claro) !important;
+}
+
+nav button:hover {
+    filter: brightness(0.9);
+}
+
+#sec-regular, #sec-dia {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+article {
+    background-color: var(--fondo-tarjeta);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+}
+
+article img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+article h4 {
+    margin: 0 0 5px 0;
+    font-size: 15px;
+}
+
+article p {
+    font-size: 12px;
+    color: #555;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* =========================================
+   MINIJUEGO SECRETO (Diseño Arcade)
+========================================= */
+.hidden-game {
+    display: none;
+}
+
+.visible-game {
+    display: block;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+#secret-game-container {
+    background: #2a221d; /* Tono oscuro para resaltar el juego */
+    border: 4px solid var(--cafe-oscuro);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    position: relative;
+    margin: 0 auto 50px auto;
+    color: var(--texto-claro);
+    max-width: 800px;
+    text-align: center;
+}
+
+#secret-game-container h3 {
+    color: #e5d5c1;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+#secret-game-container p {
+    font-size: 13px;
+    color: #a89f94;
+    margin-bottom: 15px;
+}
+
+#gameCanvas {
+    background-color: #dcd3c6; /* Fondo del lienzo */
+    border-radius: 8px;
+    border: 3px solid #1a1512;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.2);
+    display: block;
+    margin: 0 auto;
+}
+
+/* Pantalla de Fin de Juego */
+#game-over-screen {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(42, 34, 29, 0.95);
+    padding: 25px 40px;
+    border-radius: 10px;
+    border: 2px solid #e06c60;
+    box-shadow: 0 0 20px rgba(224, 108, 96, 0.3);
+    text-align: center;
+}
+
+#game-over-screen.hidden {
+    display: none;
+}
+
+#game-over-screen p {
+    color: #e06c60;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+}
+
+#final-score {
+    color: #fff;
+    font-size: 18px !important;
+}
+
+#game-over-screen button {
+    background-color: #e06c60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.2s;
+}
+
+#game-over-screen button:hover {
+    background-color: #c95b50;
+}
+
+/* =========================================
+   PIE DE PÁGINA (FOOTER)
+========================================= */
+footer {
+    background-color: var(--cafe-oscuro);
+    color: var(--texto-claro);
+    padding: 40px 20px 20px;
+    margin-top: 60px;
+}
+
+footer section:first-of-type {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+footer h4 {
+    color: var(--texto-claro);
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+footer p {
+    font-size: 11px;
+    color: #d1c4b9;
+    margin-bottom: 10px;
+}
+
+footer a {
+    color: var(--texto-claro);
+    text-decoration: underline;
+    font-size: 11px;
+}
+
+footer hr {
+    border-color: rgba(255,255,255,0.1);
+    margin: 30px auto 20px;
+    max-width: 1000px;
+}
+
+footer section:last-of-type {
+    text-align: center;
+    font-size: 11px;
+    color: #d1c4b9;
+}
+
+.footer-logo-container {
+    text-align: center;
+    margin-bottom: 25px; /* Separa el logo de las columnas de texto */
+}
+
+.footer-logo {
+    max-height: 65px; /* Controla la altura para que no se desproporcione */
+    width: auto;
+    object-fit: contain;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+}
+
+.footer-logo:hover {
+    opacity: 1; /* Brilla un poquito más cuando pasas el mouse */
+}
