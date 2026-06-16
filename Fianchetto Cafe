@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="Style/Style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fianchetto Cafe</title>
+    <style>
+        /* --- ESTILOS RESPONSIVOS AÑADIDOS --- */
+        
+        /* Reset básico para márgenes y fuentes */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Asegurar que las imágenes no desborden su contenedor */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        /* Configuración responsiva de contenedores principales */
+        header, main, footer {
+            padding: 15px;
+            text-align: center;
+        }
+
+        /* Enlaces del menú superior adaptables */
+        nav ul {
+            display: flex; 
+            gap: 15px; 
+            list-style: none; 
+            padding: 0; 
+            justify-content: center;
+            flex-wrap: wrap; /* Permite que los botones bajen de línea en móviles */
+        }
+
+        nav button {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        /* Sistema de Grid para los menús de comida */
+        #sec-regular, #sec-dia {
+            /* JS lo cambia a 'grid' al hacer clic */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        /* Estilo de las tarjetas de comida */
+        article {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: #fff;
+        }
+
+        /* Ajustes responsivos para el Canvas del Minijuego */
+        #gameCanvas {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border: 2px solid #8e7f70;
+            border-radius: 5px;
+            background-color: #f9f6f0;
+            touch-action: manipulation; /* Optimiza los toques en móviles */
+        }
+
+        /* Grid para el footer */
+        footer section:first-of-type {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo-container {
+            margin-top: 20px;
+        }
+        
+        .footer-logo {
+            max-width: 150px;
+        }
+
+        /* Utilidades del juego */
+        .hidden-game, .hidden { display: none; }
+        .visible-game, .visible { display: block; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Fianchetto Cafe</h1>
+        <p>Café & Restaurante - Una jugada perfecta</p>
+    </header>
+
+    <main>
+        <div id="secret-game-container" class="hidden-game">
+            <h3>🎮 The Impossible Coffee: Arena de Campeones</h3>
+            <p>Presiona <strong>Espacio</strong> para saltar. ¡Calcula bien tus movimientos!</p>
+            <canvas id="gameCanvas" width="800" height="260"></canvas>
+            <div id="game-over-screen" class="hidden">
+                <p>¡Fin del Juego!</p>
+                <span id="final-score" style="font-size: 16px; margin-bottom: 15px; display: block;"></span>
+                <button onclick="resetGame()" style="padding: 10px 20px; cursor: pointer;">Reintentar (Espacio)</button>
+            </div>
+        </div>
+
+        <section>
+            <img src="Img/Comidas/taza.jpg" alt="Taza de café azul" id="taza-cafe" style="cursor: pointer; max-width: 200px;">
+            <h2>Fianchetto Cafe</h2>
+            <p>Disfruta de nuestros platillos preparados con amor y los mejores ingredientes. Una experiencia gastronica única en cada visita.</p>
+        </section>
+
+        <section>
+            <h3>Nuestro Menú</h3>
+            <nav>
+                <ul>
+                    <li><button id="btn-regular" style="font-weight: bold; cursor: pointer;">Menú Regular</button></li>
+                    <li><button id="btn-dia" style="cursor: pointer;">Menú del Día</button></li>
+                    <li><button id="btn-sucursal" style="cursor: pointer;">Sucursal</button></li>
+                </ul>
+            </nav>
+
+            <div id="sec-regular" style="display: none;">
+                <article>
+                    <img src="Img/Comidas/hamburguesa.jpg" alt="Hamburguesas">
+                    <h4>Hamburguesas</h4>
+                    <p>Jugosas hamburguesas artesanales con ingredientes frescos.</p>
+                </article>
+                <article>
+                    <img src="Img/Comidas/huevos.webp" alt="Huevos al Gusto">
+                    <h4>Huevos al Gusto</h4>
+                    <p>Desayunos tradicionales preparados a tu medida.</p>
+                </article>
+                <article>
+                    <img src="Img/Comidas/quesadilla.jpg" alt="Quesadillas">
+                    <h4>Quesadillas</h4>
+                    <p>Quesadillas doradas con queso derretido.</p>
+                </article>
+                <article>
+                    <img src="Img/Comidas/chilaquiles.webp" alt="Chilaquiles">
+                    <h4>Chilaquiles</h4>
+                    <p>Chilaquiles crujientes con salsa casera.</p>
+                </article>
+                <article>
+                    <img src="Img/Comidas/flautas.jpg" alt="Flautas">
+                    <h4>Flautas</h4>
+                    <p>Flautas doradas con guarnición fresca.</p>
+                </article>
+                <article>
+                    <img src="Img/Comidas/boneless.jpg" alt="Boneless">
+                    <h4>Boneless</h4>
+                    <p>Tiras de pollo crujientes con salsas especiales.</p>
+                </article>
+                <article>
+                    <img src="Img/Comidas/pollo.jpg" alt="Pollo">
+                    <h4>Pollo</h4>
+                    <p>Platillos de pollo en diversas preparaciones.</p>
+                </article>
+            </div>
+
+            <div id="sec-dia" style="display: none;">
+                <article>
+                    <img src="Img/Comidas/Sopa de tortilla.jpg" alt="Sopa del día">
+                    <h4>Sopa de Tortilla</h4>
+                    <p>Entrada calientita para empezar bien el día.</p>
+                </article>
+                <article>
+                    <img src="Img/Comidas/Enchilada suiza.jpg" alt="Enchiladas">
+                    <h4>Enchiladas Suizas</h4>
+                    <p>El plato fuerte de hoy, gratinadas a la perfección.</p>
+                </article>
+                <article>
+                    <img src="Img/Comidas/Flan napolitano.jpg" alt="Flan">
+                    <h4>Flan Napolitano</h4>
+                    <p>El postre ideal para hacer jaque mate a tu antojo.</p>
+                </article>
+            </div>
+
+            <div id="sec-sucursal" style="display: none; padding: 20px;">
+                <div style="border: 2px solid #8e7f70; border-radius: 10px; padding: 20px; max-width: 400px; margin: 0 auto; text-align: left; background-color: #f9f6f0;">
+                    <h4 style="margin-top: 0; color: #34495e; border-bottom: 1px solid #ccc; padding-bottom: 10px;">Fianchetto Cafe - Matriz</h4>
+                    <p><strong>📍 Dirección:</strong> Prol. General Ignacio Zaragoza 1199, Nueva Villahermosa, 86070 Villahermosa, Tab.</p>
+                    <p><strong>📞 Teléfono:</strong> +529932202786 </p>
+                    <p><strong>🕒 Horario:</strong> Lunes a Viernes 8:00AM a 3:00PM </p>
+                    <p><strong>📌 Referencias:</strong> A contra esquina del IMSS 32 </p>
+                    <button onclick="window.open('https://www.google.com/maps/search/?api=1&query=Calle+General+Ignacio+Zaragoza+1199,+86070+Villahermosa,+Tabasco', '_blank')" style="margin-top: 15px; width: 100%; padding: 10px; cursor: pointer;">Abrir en Google Maps</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <section>
+            <div>
+                <h4>Venta de Libros</h4>
+                <p>Explora nuestra colección de libros sobre ajedrez, estrategia, cocina y cultura.</p>
+                <a href="#">Ver catálogo</a>
+            </div>
+            <div>
+                <h4>Psicología</h4>
+                <p>Sesiones de desarrollo personal y mental coaching con expertos certificados.</p>
+                <a href="#">Más información</a>
+            </div>
+            <div>
+                <h4>Charlas</h4>
+                <p>Conferencias y pláticas sobre estrategia, liderazgo y pensamiento crítico.</p>
+                <a href="#">Próximas charlas</a>
+            </div>
+            <div>
+                <h4>Obras de Teatro</h4>
+                <p>Presentaciones teatrales en vivo en nuestro espacio cultural los fines de semana.</p>
+                <a href="#">Ver programación</a>
+            </div>
+        </section>
+        <hr>
+        <section>
+            <p>Fianchetto Cafe - Donde cada bocado es una jugada maestra</p>
+            <p>© 2026 Todos los derechos reservados</p>
+        </section>
+
+        <div class="footer-logo-container">
+            <img src="Img/Fondo/logo.png" alt="Logo Fianchetto Cafe" class="footer-logo">
+        </div>
+    </footer>
+
+    <script>
+        const btnRegular = document.getElementById('btn-regular');
+        const btnDia = document.getElementById('btn-dia');
+        const btnSucursal = document.getElementById('btn-sucursal');
+        
+        const secRegular = document.getElementById('sec-regular');
+        const secDia = document.getElementById('sec-dia');
+        const secSucursal = document.getElementById('sec-sucursal');
+
+        function ocultarSecciones() {
+            secRegular.style.display = 'none';
+            secDia.style.display = 'none';
+            secSucursal.style.display = 'none';
+            
+            btnRegular.style.fontWeight = 'normal';
+            btnDia.style.fontWeight = 'normal';
+            btnSucursal.style.fontWeight = 'normal';
+        }
+
+        // Eventos de click corregidos para usar Grid responsivo
+        btnRegular.addEventListener('click', () => {
+            ocultarSecciones();
+            secRegular.style.display = 'grid'; 
+            btnRegular.style.fontWeight = 'bold';
+        });
+
+        btnDia.addEventListener('click', () => {
+            ocultarSecciones();
+            secDia.style.display = 'grid'; 
+            btnDia.style.fontWeight = 'bold';
+        });
+
+        btnSucursal.addEventListener('click', () => {
+            ocultarSecciones();
+            secSucursal.style.display = 'block'; 
+            btnSucursal.style.fontWeight = 'bold';
+        });
+
+        // Al cargar la página, mostrar el menú regular por defecto
+        secRegular.style.display = 'grid';
+
+        // ----------------------------------------
+        // LÓGICA DEL MINIJUEGO SECRETO
+        // ----------------------------------------
+        const tazaImg = document.getElementById('taza-cafe');
+        const gameContainer = document.getElementById('secret-game-container');
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const finalScoreText = document.getElementById('final-score');
+
+        let clickCount = 0;
+        let gameInterval;
+        let isPlaying = false;
+
+        const FLOOR_Y = 230;
+        const BOX_SIZE = 30;
+
+        let player = { 
+            x: 100, 
+            y: FLOOR_Y - BOX_SIZE, 
+            size: BOX_SIZE, 
+            vy: 0, 
+            gravity: 1.3, 
+            jumpForce: -15, 
+            isGrounded: true, 
+            angle: 0
+        };
+
+        let obstacles = [];
+        let score = 0;
+        let gameSpeed = 6;
+        let spawnCooldown = 0;
+
+        const COLORS = {
+            floor: '#8e7f70', 
+            playerCube: '#34495e',
+            playerStroke: '#fff',
+            spike: '#e06c60',
+            block: '#d5c5b5',
+            text: '#5a5045'
+        };
+
+        tazaImg.addEventListener('click', () => {
+            clickCount++;
+            if (clickCount === 3) {
+                gameContainer.classList.remove('hidden-game');
+                gameContainer.classList.add('visible-game');
+                gameContainer.scrollIntoView({ behavior: 'smooth' });
+                initGame();
+            }
+        });
+
+        // Soporte para saltar tocando la pantalla en móviles
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleJump();
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                handleJump();
+            }
+        });
+
+        function handleJump() {
+            if (!isPlaying && gameOverScreen.classList.contains('hidden')) return;
+            
+            if (gameOverScreen.classList.contains('visible')) {
+                resetGame();
+            } else if (player.isGrounded) {
+                player.vy = player.jumpForce;
+                player.isGrounded = false;
+            }
+        }
+
+        function initGame() {
+            if (isPlaying) return;
+            resetGame();
+        }
+
+        function resetGame() {
+            player.y = FLOOR_Y - BOX_SIZE;
+            player.vy = 0;
+            player.angle = 0;
+            player.isGrounded = true;
+            obstacles = [];
+            score = 0;
+            gameSpeed = 6;
+            spawnCooldown = 0;
+            gameOverScreen.className = 'hidden';
+            if(!isPlaying) {
+                isPlaying = true;
+                update();
+            }
+        }
+
+        function generateObstaclePattern() {
+            if (spawnCooldown > 0) {
+                spawnCooldown--;
+                return;
+            }
+
+            const r = Math.floor(Math.random() * 11) + 1;
+            const startX = 850;
+            const B = BOX_SIZE; 
+
+            switch(r) {
+                case 1: 
+                    obstacles.push({ x: startX, y: FLOOR_Y, type: 'spike' });
+                    obstacles.push({ x: startX + B, y: FLOOR_Y, type: 'spike' });
+                    obstacles.push({ x: startX + B*2, y: FLOOR_Y, type: 'spike' });
+                    spawnCooldown = 50;
+                    break;
+                case 2: 
+                    obstacles.push({ x: startX, y: FLOOR_Y, type: 'spike' });
+                    obstacles.push({ x: startX + B, y: FLOOR_Y, type: 'block' });
+                    obstacles.push({ x: startX + B*2, y: FLOOR_Y, type: 'spike' });
+                    spawnCooldown = 50;
+                    break;
+                case 3: 
+                    obstacles.push({ x: startX, y: FLOOR_Y, type: 'spike' });
+                    obstacles.push({ x: startX + B, y: FLOOR_Y, type: 'block' });
+                    obstacles.push({ x: startX + B, y: FLOOR_Y - B, type: 'block' }); 
+                    obstacles.push({ x: startX + B*2, y: FLOOR_Y, type: 'spike' });
+                    spawnCooldown = 55;
+                    break;
+                case 4: 
+                    obstacles.push({ x: startX, y: FLOOR_Y, type: 'spike' });
+                    for(let i=1; i<=8; i++) {
+                        obstacles.push({ x: startX + B*i, y: FLOOR_Y, type: 'block' });
+                    }
+                    obstacles.push({ x: startX + B*4, y: FLOOR_Y - B, type: 'spike' });
+                    obstacles.push({ x: startX + B*5, y: FLOOR_Y - B, type: 'spike' });
+                    spawnCooldown = 85;
+                    break;
+                case 5: 
+                    [0, 3, 6].forEach(i => obstacles.push({ x: startX + B*i, y: FLOOR_Y, type: 'block' }));
+                    [1, 2, 4, 5].forEach(i => obstacles.push({ x: startX + B*i, y: FLOOR_Y, type: 'spike' }));
+                    spawnCooldown = 75;
+                    break;
+                case 6: 
+                    [0, 4, 8, 12].forEach(i => obstacles.push({ x: startX + B*i, y: FLOOR_Y, type: 'spike' }));
+                    [1, 2, 3, 5, 6, 7, 9, 10, 11].forEach(i => obstacles.push({ x: startX + B*i, y: FLOOR_Y, type: 'block' }));
+                    spawnCooldown = 120;
+                    break;
+                case 7: 
+                    obstacles.push({ x: startX, y: FLOOR_Y, type: 'spike' });
+                    obstacles.push({ x: startX + B, y: FLOOR_Y, type: 'spike' });
+                    obstacles.push({ x: startX + B*2, y: FLOOR_Y, type: 'block' });
+                    spawnCooldown = 45;
+                    break;
+                case 8: 
+                    obstacles.push({ x: startX, y: FLOOR_Y, type: 'block' });
+                    obstacles.push({ x: startX + B, y: FLOOR_Y, type: 'spike' });
+                    spawnCooldown = 40;
+                    break;
+                case 9: 
+                    for(let i=0; i<7; i++) {
+                        obstacles.push({ x: startX + B*i, y: FLOOR_Y, type: 'block' });
+                    }
+                    obstacles.push({ x: startX + B*3, y: FLOOR_Y - B, type: 'block' });
+                    obstacles.push({ x: startX + B*3, y: FLOOR_Y - B*2, type: 'spike' });
+                    spawnCooldown = 80;
+                    break;
+                case 10: 
+                    obstacles.push({ x: startX, y: FLOOR_Y, type: 'block' });
+                    obstacles.push({ x: startX, y: FLOOR_Y - B, type: 'block' }); 
+                    obstacles.push({ x: startX + B, y: FLOOR_Y, type: 'spike' });
+                    spawnCooldown = 45;
+                    break;
+                case 11: 
+                    obstacles.push({ x: startX, y: FLOOR_Y, type: 'spike' });
+                    spawnCooldown = 35;
+                    break;
+            }
+        }
+
+        function update() {
+            if (!isPlaying) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = COLORS.floor; 
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(0, FLOOR_Y);
+            ctx.lineTo(canvas.width, FLOOR_Y);
+            ctx.stroke();
+
+            player.vy += player.gravity;
+            player.y += player.vy;
+
+            let onAnyBlock = false; 
+
+            generateObstaclePattern();
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                obs.x -= gameSpeed;
+
+                if (obs.type === 'spike') {
+                    ctx.fillStyle = COLORS.spike;
+                    ctx.beginPath();
+                    ctx.moveTo(obs.x, obs.y);
+                    ctx.lineTo(obs.x + 15, obs.y - BOX_SIZE);
+                    ctx.lineTo(obs.x + 30, obs.y);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    if (player.x + player.size > obs.x + 6 && player.x < obs.x + BOX_SIZE - 6 &&
+                        player.y + player.size > obs.y - BOX_SIZE + 8 && player.y < obs.y) {
+                        gameOver(); return;
+                    }
+
+                } else if (obs.type === 'block') {
+                    ctx.fillStyle = COLORS.block;
+                    ctx.fillRect(obs.x, obs.y - BOX_SIZE, BOX_SIZE, BOX_SIZE);
+                    ctx.strokeStyle = COLORS.floor;
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(obs.x, obs.y - BOX_SIZE, BOX_SIZE, BOX_SIZE);
+
+                    if (player.vy >= 0) {
+                        if (player.x + player.size > obs.x + 2 && player.x < obs.x + BOX_SIZE - 2) {
+                            if (player.y + player.size <= obs.y - BOX_SIZE + 12 && player.y + player.size >= obs.y - BOX_SIZE - 5) {
+                                player.y = obs.y - BOX_SIZE - player.size;
+                                player.vy = 0;
+                                onAnyBlock = true;
+                            }
+                        }
+                    }
+
+                    if (!onAnyBlock) {
+                        if (player.x + player.size > obs.x + 2 && player.x < obs.x + BOX_SIZE - 2) {
+                            if (player.y + player.size > obs.y - BOX_SIZE + 2 && player.y < obs.y - 2) {
+                                gameOver(); return;
+                            }
+                        }
+                    }
+                }
+
+                if (obs.x < -150) {
+                    obstacles.splice(i, 1);
+                    score++;
+                    if (score % 40 === 0) gameSpeed += 0.4;
+                }
+            }
+
+            if (player.y >= FLOOR_Y - player.size) {
+                player.y = FLOOR_Y - player.size;
+                player.vy = 0;
+                player.isGrounded = true;
+                player.angle = Math.round(player.angle / 90) * 90;
+            } else if (onAnyBlock) {
+                player.isGrounded = true;
+                player.angle = Math.round(player.angle / 90) * 90;
+            } else {
+                player.isGrounded = false;
+                player.angle += 6; 
+            }
+
+            ctx.save();
+            ctx.translate(player.x + player.size/2, player.y + player.size/2);
+            ctx.rotate((player.angle * Math.PI) / 180);
+            ctx.fillStyle = COLORS.playerCube;
+            ctx.fillRect(-player.size/2, -player.size/2, player.size, player.size);
+            ctx.strokeStyle = COLORS.playerStroke;
+            ctx.lineWidth = 2;
+            ctx.strokeRect(-player.size/2, -player.size/2, player.size, player.size);
+            ctx.restore();
+
+            ctx.fillStyle = COLORS.text;
+            ctx.font = 'bold 14px sans-serif';
+            ctx.fillText(`PUNTOS: ${Math.floor(score / 3)}`, 20, 35);
+
+            gameInterval = requestAnimationFrame(update);
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            cancelAnimationFrame(gameInterval);
+            finalScoreText.innerText = `Puntuación Final: ${Math.floor(score / 3)}`;
+            gameOverScreen.className = 'visible';
+        }
+    </script>
+</body>
+</html>
